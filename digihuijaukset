@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html lang="fi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Näin vältyt digihuijauksilta ja suojaat laitteesi | Soumi.fi</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --suomi-blue: #003479;
+      --suomi-blue-mid: #0058a3;
+      --suomi-blue-light: #e8f0f8;
+      --suomi-link: #0058a3;
+      --suomi-link-hover: #003479;
+      --white: #ffffff;
+      --bg: #f2f5f9;
+      --border: #c8d8eb;
+      --text: #1a1a1a;
+      --text-mid: #444444;
+      --warn-bg: #1a2a3a;
+      --warn-text: #e8f0f8;
+    }
+
+    body {
+      font-family: 'Segoe UI', 'Arial', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+    }
+
+    /* ── WARNING BANNER ── */
+    .warning-banner {
+      background: var(--warn-bg);
+      color: var(--warn-text);
+      text-align: center;
+      padding: 10px 20px;
+      font-size: 13px;
+      letter-spacing: 0.02em;
+      border-bottom: 2px solid #4a7ab5;
+    }
+    .warning-banner strong { color: #ffffff; }
+
+    /* ── HEADER ── */
+    header {
+      background: var(--white);
+      border-bottom: 1px solid var(--border);
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 32px;
+      max-width: 1200px;
+      margin: 0 auto;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 20px;
+      font-weight: bold;
+      color: var(--suomi-blue);
+      text-decoration: none;
+    }
+    .logo-icon {
+      width: 38px;
+      height: 38px;
+      background: var(--suomi-blue);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 3px;
+    }
+    .logo-icon svg { fill: white; width: 24px; height: 24px; }
+    .header-actions { display: flex; align-items: center; gap: 12px; }
+    .login-btn-wrapper { position: relative; }
+    .login-btn {
+      background: var(--suomi-blue);
+      color: white;
+      border: 2px solid rgba(255,255,255,0.4);
+      border-radius: 3px;
+      padding: 9px 20px;
+      font-size: 14px;
+      cursor: pointer;
+      opacity: 0.85;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .login-btn:hover { opacity: 1; }
+    .login-btn svg { fill: white; width: 16px; height: 16px; flex-shrink: 0; }
+    .login-tooltip {
+      display: none;
+      position: absolute;
+      top: calc(100% + 10px);
+      right: 0;
+      background: var(--warn-bg);
+      color: var(--warn-text);
+      font-size: 13px;
+      padding: 14px 16px 14px 14px;
+      border: 1px solid #4a7ab5;
+      border-radius: 4px;
+      z-index: 99;
+      width: 340px;
+      line-height: 1.65;
+    }
+    .login-tooltip.visible { display: block; }
+    .login-tooltip::after {
+      content: '';
+      position: absolute;
+      bottom: 100%;
+      right: 24px;
+      border: 6px solid transparent;
+      border-bottom-color: #4a7ab5;
+    }
+    .login-tooltip-close {
+      position: absolute;
+      top: 8px;
+      right: 10px;
+      background: none;
+      border: none;
+      color: #a8c8e8;
+      font-size: 16px;
+      cursor: pointer;
+      line-height: 1;
+      padding: 0 4px;
+    }
+    .login-tooltip-close:hover { color: white; }
+
+    /* ── PAGE HERO ── */
+    .page-hero {
+      background: var(--suomi-blue);
+      color: white;
+      padding: 40px 32px 36px;
+    }
+    .page-hero-inner {
+      max-width: 800px;
+      margin: 0 auto;
+    }
+    .breadcrumb {
+      font-size: 13px;
+      color: #a8c8e8;
+      margin-bottom: 14px;
+    }
+    .breadcrumb a {
+      color: #a8c8e8;
+      text-decoration: none;
+    }
+    .breadcrumb a:hover { text-decoration: underline; }
+    .breadcrumb span { margin: 0 6px; opacity: 0.5; }
+    .page-hero h1 {
+      font-size: clamp(22px, 3vw, 36px);
+      font-weight: 700;
+      line-height: 1.3;
+      margin-bottom: 12px;
+    }
+    .page-hero-meta {
+      font-size: 13px;
+      color: #7aafd4;
+    }
+    .page-hero-badge {
+      display: inline-block;
+      background: rgba(255,255,255,0.15);
+      color: #cce0f5;
+      font-size: 11px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      padding: 3px 12px;
+      border-radius: 2px;
+      border: 1px solid rgba(255,255,255,0.2);
+      margin-bottom: 14px;
+    }
+
+    /* ── ARTICLE LAYOUT ── */
+    .article-wrap {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 48px 32px 64px;
+    }
+
+    /* ── TABLE OF CONTENTS ── */
+    .toc {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-left: 4px solid var(--suomi-blue);
+      border-radius: 0 4px 4px 0;
+      padding: 20px 24px;
+      margin-bottom: 40px;
+    }
+    .toc-title {
+      font-size: 13px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--suomi-blue);
+      margin-bottom: 12px;
+    }
+    .toc ol {
+      padding-left: 18px;
+      margin: 0;
+    }
+    .toc li {
+      margin-bottom: 6px;
+    }
+    .toc a {
+      font-size: 14px;
+      color: var(--suomi-link);
+      text-decoration: none;
+    }
+    .toc a:hover { text-decoration: underline; }
+
+    /* ── ARTICLE SECTIONS ── */
+    .article-section {
+      margin-bottom: 48px;
+      animation: fadeUp 0.4s forwards;
+      opacity: 0;
+    }
+    .article-section:nth-child(1) { animation-delay: 0.05s; }
+    .article-section:nth-child(2) { animation-delay: 0.12s; }
+    .article-section:nth-child(3) { animation-delay: 0.19s; }
+    .article-section:nth-child(4) { animation-delay: 0.26s; }
+    .article-section:nth-child(5) { animation-delay: 0.33s; }
+    .article-section:nth-child(6) { animation-delay: 0.40s; }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(12px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .section-number {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 32px;
+      height: 32px;
+      background: var(--suomi-blue);
+      color: white;
+      font-size: 14px;
+      font-weight: 700;
+      border-radius: 50%;
+      margin-bottom: 12px;
+      flex-shrink: 0;
+    }
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+    .article-section h2 {
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--suomi-blue);
+      line-height: 1.3;
+    }
+    .article-section p {
+      font-size: 15px;
+      line-height: 1.75;
+      color: var(--text);
+      margin-bottom: 12px;
+    }
+    .article-section p:last-child { margin-bottom: 0; }
+
+    /* Tip boxes */
+    .tip-box {
+      background: var(--suomi-blue-light);
+      border-left: 4px solid var(--suomi-blue-mid);
+      border-radius: 0 4px 4px 0;
+      padding: 14px 18px;
+      margin-top: 16px;
+    }
+    .tip-box-label {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--suomi-blue);
+      margin-bottom: 6px;
+    }
+    .tip-box p {
+      font-size: 14px;
+      color: var(--suomi-blue);
+      margin: 0;
+      line-height: 1.6;
+    }
+
+    /* Warning boxes */
+    .warn-box {
+      background: #fff8e1;
+      border-left: 4px solid #f59e0b;
+      border-radius: 0 4px 4px 0;
+      padding: 14px 18px;
+      margin-top: 16px;
+    }
+    .warn-box-label {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: #92400e;
+      margin-bottom: 6px;
+    }
+    .warn-box p {
+      font-size: 14px;
+      color: #78350f;
+      margin: 0;
+      line-height: 1.6;
+    }
+
+    /* Checklist */
+    .checklist {
+      list-style: none;
+      padding: 0;
+      margin-top: 14px;
+    }
+    .checklist li {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      font-size: 15px;
+      line-height: 1.6;
+      color: var(--text);
+      padding: 6px 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .checklist li:last-child { border-bottom: none; }
+    .checklist li::before {
+      content: '✓';
+      color: var(--suomi-blue-mid);
+      font-weight: 700;
+      font-size: 15px;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
+    /* Divider */
+    .article-divider {
+      border: none;
+      border-top: 1px solid var(--border);
+      margin: 0 0 48px;
+    }
+
+    /* Back link */
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 14px;
+      color: var(--suomi-link);
+      text-decoration: none;
+      margin-bottom: 40px;
+    }
+    .back-link:hover { color: var(--suomi-link-hover); text-decoration: underline; }
+    .back-link::before { content: '‹'; font-size: 18px; line-height: 1; }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--suomi-blue);
+      color: #a8c8e8;
+      text-align: center;
+      padding: 32px 32px;
+      font-size: 13px;
+      line-height: 1.8;
+    }
+    footer strong { color: white; }
+    .footer-divider {
+      border: none;
+      border-top: 1px solid rgba(255,255,255,0.15);
+      margin: 16px auto;
+      max-width: 600px;
+    }
+
+    @media (max-width: 600px) {
+      .article-wrap { padding: 32px 16px 48px; }
+      .header-top { padding: 12px 16px; }
+      .page-hero { padding: 28px 16px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- WARNING BANNER -->
+<div class="warning-banner">
+  <strong>⚠ HUOMIO:</strong> Et ole aidolla Suomi.fi-sivustolla. Tämä on kyberturvallisuuskampanja.
+</div>
+
+<!-- HEADER -->
+<header>
+  <div class="header-top">
+    <a href="index.html" class="logo">
+      <div class="logo-icon">
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="8" height="8"/>
+          <rect x="14" y="2" width="8" height="8"/>
+          <rect x="2" y="14" width="8" height="8"/>
+          <rect x="14" y="14" width="8" height="8"/>
+        </svg>
+      </div>
+      <span>Soumi.fi</span>
+    </a>
+    <div class="header-actions">
+      <div class="login-btn-wrapper">
+        <button class="login-btn" id="login-btn">
+          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12 2a5 5 0 100 10A5 5 0 0012 2zm-7 20a7 7 0 0114 0H5z"/>
+          </svg>
+          Tunnistaudu
+        </button>
+        <div class="login-tooltip" id="login-tooltip">
+          <button class="login-tooltip-close" onclick="document.getElementById('login-tooltip').classList.remove('visible')" aria-label="Sulje">✕</button>
+          ⚠ Tunnistautuminen ei tälle sivulle onnistu.<br><br>
+          Olethan tarkka ja tunnistaudut vain aidolle Suomi.fi-sivustolle.<br><br>
+          Asiointipalveluissa kuten Vero.fi sivuilla tunnistaudutaan <strong>https://tunnistautuminen.suomi.fi/</strong> -sivuston kautta.<br><br>
+          Osoitteessa ei saa olla kirjoitusvirheitä, eikä liikaa esimerkiksi .fi-päätteitä.
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- PAGE HERO -->
+<section class="page-hero">
+  <div class="page-hero-inner">
+    <div class="breadcrumb">
+      <a href="index.html">Etusivu</a>
+      <span>›</span>
+      Näin vältyt digihuijauksilta
+    </div>
+    <div class="page-hero-badge">Opas</div>
+    <h1>Näin vältyt digihuijauksilta ja suojaat laitteesi</h1>
+    <p class="page-hero-meta">Samuel Heinäjoki &nbsp;·&nbsp; Päivitetty 16.4.2026 &nbsp;·&nbsp; Lukuaika n. 5 min</p>
+  </div>
+</section>
+
+<!-- ARTICLE -->
+<div class="article-wrap">
+
+  <a href="index.html" class="back-link">Takaisin etusivulle</a>
+
+  <p style="font-size:15px; line-height:1.75; color:var(--text-mid); margin-bottom: 36px;">Tämän oppaan sisältö voi tuntua raskaalta lukea, mutta se on erittäin hyvä tietopaketti sen suhteen miten välttyä joutumista rikollisten uhreiksi. Sivun lopussa on lisää linkkejä ulkoisiin palveluihin, sekä tietoa ja tukea verkkorikoksen uhriksi joutuneille.</p>
+
+  <!-- TABLE OF CONTENTS -->
+  <div class="toc">
+    <div class="toc-title">Sisällysluettelo</div>
+    <ol>
+      <li><a href="#viranomaisasiointi">Viranomaisasiointi, Suomi.fi, pankit ja virastot</a></li>
+      <li><a href="#laitteet">Laitteiden suojaus ja päivitykset</a></li>
+      <li><a href="#kayttajatilit">Käyttäjätilit ja salasanat, sekä somepalvelut</a></li>
+    </ol>
+  </div>
+
+  <!-- SECTION 1 -->
+  <div class="article-section" id="viranomaisasiointi">
+    <div class="section-header">
+      <div class="section-number">1</div>
+      <h2>Viranomaisasiointi, Suomi.fi, pankit ja virastot</h2>
+    </div>
+    <p><strong>Phishing</strong> on yksi yleisimmistä digihuijauksen muodoista. Huijari lähettää sähköpostin, tekstiviestin tai WhatsApp-viestin, joka näyttää tulevan luotettavalta taholta, kuten pankilta, Kelalta tai Postilta. Viesti pyytää sinua klikkaamaan linkkiä ja syöttämään henkilö- tai maksutietoja.</p>
+    <p><strong>Aidot viranomaiset ja pankit eivät koskaan pyydä sinua lähettämään salasanoja, verkkopankkitunnuksia tai henkilötunnustasi sähköpostin tai tekstiviestin kautta.</strong></p>
+    <p>Jos viesti luo kiireen tuntua <em>("tilisi suljetaan 24 tunnin kuluttua")</em> tai lupaa jotain liian hyvää ollakseen totta, se on todennäköisesti huijaus. Pysähdy, älä klikkaa. Nuku yön yli, tai kysy kaverilta apua mahdollisen huijauksen tunnistamiseen.</p>
+    <p>Voit myös itse soittaa viestissä mainitulle viranomaiselle ja varmistaa asian. Huomaathan kuitenkin, että huijari saattaa tarjota oman numeronsa. Esimerkiksi pankin asiakaspalvelupuhelinnumero kannattaa vilkaista vaikka tilisopimuksesta tai pyörähtää konttorilla.</p>
+    <p>Tarkista aina <strong>lähettäjän sähköpostiosoite kokonaisuudessaan</strong>. Huijarit käyttävät osoitteita kuten <em>noreply@pankki-fi.com</em> tai <em>tuki@op-verkkopalvelu.net</em> — ne eivät ole aitoja. Myös <em>Soumi.fi</em>-tyylisiä kirjoitusvirheitä esiintyy paljon. Tarkastele aina selaimen osoiteriviä, ja suosi mobiilisovellusten (mobiilipankki ja esim. Suomi.fi-sovellus) käyttöä — niitä käyttämällä et ikinä päädy huijaussivulle.</p>
+    <div class="warn-box">
+      <div class="warn-box-label">⚠ Älä käytä hakukoneita viranomaisasioinnissa</div>
+      <p>Älä käytä Googlea, Bingiä tai muita hakukoneita — etkä tekoälyä — etsiessäsi viranomaissivustoja. Hakutuloksissa voi esiintyä huijauslinkkejä. <strong>Kirjoita aina osoite itse suoraan selaimen osoiteriville.</strong> Jos osoitteessa on jotain outoa, kirjoitusvirhe tai liikaa esim. <em>.fi</em>-päätteitä, älä kirjaudu tai syötä tietoja.</p>
+    </div>
+
+    <!-- Address bar illustration -->
+    <div style="margin-top: 20px;">
+      <div style="font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-mid); margin-bottom: 8px;">Esimerkki väärennetystä osoitteesta — älä tunnistaudu tällaisella sivulla:</div>
+      <div style="display: flex; align-items: center; gap: 10px; background: #f0f0f0; border: 1.5px solid #d0d0d0; border-radius: 6px; padding: 8px 14px; font-family: monospace; font-size: 14px;">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="flex-shrink:0;">
+          <circle cx="12" cy="12" r="10" stroke="#cc0000" stroke-width="2"/>
+          <line x1="8" y1="8" x2="16" y2="16" stroke="#cc0000" stroke-width="2" stroke-linecap="round"/>
+          <line x1="16" y1="8" x2="8" y2="16" stroke="#cc0000" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+        <span style="color: #cc0000; text-decoration: line-through;">https://tuunistautuminen.suorni.fi/</span>
+        <span style="margin-left: 6px; font-family: sans-serif; font-size: 12px; background: #fdecea; color: #cc0000; border: 1px solid #f5c6c2; border-radius: 3px; padding: 2px 8px;">Kirjoitusvirhe!</span>
+      </div>
+      <div style="display: flex; align-items: center; gap: 10px; background: #f0f8f0; border: 1.5px solid #b0d8b0; border-radius: 6px; padding: 8px 14px; font-family: monospace; font-size: 14px; margin-top: 8px;">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="flex-shrink:0;">
+          <circle cx="12" cy="12" r="10" stroke="#2a7a2a" stroke-width="2"/>
+          <polyline points="7,12 11,16 17,8" stroke="#2a7a2a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <span style="color: #2a7a2a;">https://tunnistautuminen.suomi.fi/</span>
+        <span style="margin-left: 6px; font-family: sans-serif; font-size: 12px; background: #eaf5ea; color: #2a7a2a; border: 1px solid #b0d8b0; border-radius: 3px; padding: 2px 8px;">Aito osoite ✓</span>
+      </div>
+    </div>
+  </div>
+
+  <hr class="article-divider">
+
+  <!-- SECTION 2 -->
+  <div class="article-section" id="laitteet">
+    <div class="section-header">
+      <div class="section-number">2</div>
+      <h2>Laitteiden suojaus ja päivitykset</h2>
+    </div>
+    <p>Kaikille nettiin kytketyille laitteille tulee päivityksiä. Mikäli sellaisia ei koskaan tule, ei laite ole enää suojattu. Päivitykset asentuvat yleensä itsenäisesti, mutta joskus laitteet pyytävät käyttäjän toimia, kuten uudelleenkäynnistystä.</p>
+    <p>Tietoturvapäivitykset korjaavat tunnettuja haavoittuvuuksia, joita rikolliset hyödyntävät. Kun laitteen käyttöjärjestelmä vanhenee, ei se saa enää tietoturvapäivityksiä — kuten on käynyt esimerkiksi Windows 7:n kohdalla, ja pian myös viimeistenkin Windows 10 -laitteiden. <strong>Vanhentunut käyttöjärjestelmä on kuin kerrostaloasunto, jonka ovi on rappukäytävään auki.</strong> Se ei välttämättä heti houkuttele rikollista, mutta kuten tiedämme — rappukäytävässä liikkuu paljon kummallista porukkaa.</p>
+    <p>Joskus päivitykset voivat epäilyttää: onko kaikki tarpeen tai "oikeita"?</p>
+    <div class="tip-box">
+      <div class="tip-box-label">✓ Näin tunnistat oikean päivityksen</div>
+      <p><strong>Tietokoneella</strong> päivitystä pyydetään usein uudelleenkäynnistyksen yhteydessä. <strong>Puhelimella</strong> Asetukset tai sovelluskauppa (Play Kauppa, Galaxy Store) ilmoittaa niistä. Ne kaikki ovat oikeita ja tarpeellisia.</p>
+    </div>
+    <div class="warn-box" style="margin-top: 16px;">
+      <div class="warn-box-label">⚠ Huijausmainokset päivityksiksi naamioituneena</div>
+      <p>Jos selaillessasi ruokaohjeita lävähtää näytölle viesti joka käskee päivittää äkkiä — se on huijausmainos. Niitä on paljon. <strong>Mainoksen näkeminen ei tarkoita että laitteesi olisi saastunut.</strong> Vasta kun klikkaat mainoksesta ja alat latailla sen kauppaamia "puhdistusohjelmia" olet pahasti hukassa.</p>
+    </div>
+    <p style="margin-top: 16px;">Nykypäivänä tietokoneet ovat suojattu valmistajien omien tietoturvapäivitysten ja esimerkiksi Windowsin ilmaisen Defenderin ansiosta perustasoisesti. Ne estävät virukset ja madot, jos käyttäjä on valveutunut.</p>
+    <p>Mikäli kuitenkin tahtoo mielenrauhaa ja haluaa estää pääsyn esimerkiksi osille huijaussivustoista, kannattaa harkita maksullista lisätietoturvaa. Maksulliset turvapaketit sisältävät usein myös vakuutustyyppisiä lisäpalveluita sekä apua oman tietoturvan hallintaan. <strong>Itse suosittelen F-Securea tai operaattoreiden tarjoamia turvapaketteja.</strong> Ilmaisista tietoturvaohjelmista ei yleensä ole hyötyä — niiden mainokset tuovat enemmän haittaa ja häiriöitä kuin hyötyä.</p>
+    <ul class="checklist">
+      <li>Tietokoneet ja mobiililaitteet tulee suojata salasanalla tai pääsykoodilla. Myös sormenjälki- tai kasvojentunnistus voi olla kätevä lisä.</li>
+      <li>Käytä operaattorilta hankittua nettireititintä, jos oma osaamisesi ei riitä tarkastelemaan reitittimien päivityksiä tai salasanan vaihtoja. Operaattoreiden reitittimissä on nykyään (2026) uniikit salasanat, joita kotikäyttäjän ei ole pakko vaihtaa — ja ne päivittyvät automaattisesti käyttöaikansa n. 3–5 vuoden ajan.</li>
+    </ul>
+  </div>
+
+  <hr class="article-divider">
+
+  <!-- SECTION 3 -->
+  <div class="article-section" id="kayttajatilit">
+    <div class="section-header">
+      <div class="section-number">3</div>
+      <h2>Käyttäjätilit ja salasanat, sekä somepalvelut</h2>
+    </div>
+    <p><strong>Käyttäjätili</strong> voi olla pelottava termi. Se ei kuitenkaan liity rahaan. Se on tunnisteesi palveluun — kuten esimerkiksi henkilötunnuksesi on tunniste terveyskeskuksessa. Käyttäjätili eli käyttäjätunnus on usein muodoltaan sähköpostiosoite. Sähköpostiosoitteita voi olla ihmisellä monia, mutta samaa sähköpostiosoitetta ei voi olla useammalla henkilöllä.</p>
+    <p>Käyttäjätilit on suojattu salasanoin. Salasanoiksi suositellaan nykyään vähintään 16 merkin salasanoja, jotka sisältävät kirjaimia, numeroita ja erikoismerkkejä. Voit vaikka luoda <strong>salalauseita</strong> kuten:</p>
+    <div class="tip-box">
+      <div class="tip-box-label">✓ Esimerkki hyvästä salasanasta</div>
+      <p><em>Aamulla-88Paistoi?Molla</em> — salasanoissa on hyvä käyttää murresanoja tai lempinimiä, kuten auringolle "molla". Niitä hakkerit eivät murra yhtä helposti kuin kirjakieltä.</p>
+    </div>
+    <p style="margin-top: 16px;">Käytä joka paikkaan eri salasanaa. Tässä voimme palata kerrostalovertaukseen: jos talonmies pudottaa yleisavaimen, saa tunkeilija pääsyn kaikkiin asuntoihin. Vaatimus voi tuntua hullulta, mutta tässä kannattaa käyttää <strong>salasananhallintaohjelmaa</strong>.</p>
+    <p>Pankit, some-alustat, sähköpostit ja muut tärkeät palvelut tulee aina suojata jokainen eri salasanoin. Mutta tarvitseeko esimerkiksi kirjakerhon ja työkaluklubin salasanojen olla eri — etenkin jos niihin kirjautuessa ei ole luovutettu henkilötietoja kuten syntymäaikaa tai osoitteita? Aina parempi jos käytät eri salasanoja myös näissä. Mutta jos jossain on lipsuttava, niin lipsu tässä. Toki lipsua ei tarvitse jos käytät salasananhallintaohjelmaa — ymmärrän kuitenkin, että se voi olla kova vaatimus kaikille.</p>
+    <div class="tip-box" style="margin-top: 4px;">
+      <div class="tip-box-label">✓ Salasananhallinta</div>
+      <p>Lisätietoa salasanojen hallinnasta löytyy <a href="https://www.traficom.fi/fi/ohjeet-ja-oppaat/ohjeet-ja-oppaat-yksityishenkiloille/salasanat-haltuun-kuka-kayttaa-tiliasi" target="_blank" rel="noopener" style="color: var(--suomi-link);">Traficomin sivuilta</a>.</p>
+    </div>
+    <p style="margin-top: 20px;"><strong>Kaksivaiheinen vahvistus on asia joka pelastaa sinut huijareilta lähes aina.</strong></p>
+    <p>Kaksivaiheinen tunnistautuminen tarkoittaa, että salasanan lisäksi tarvitaan toinen vahvistus — esimerkiksi puhelimeen tuleva koodi. Vaikka salasanasi vuotaisi, tili pysyy turvassa. Ellet luovuta kaksivaiheisen vahvistuksen tunnisteita huijareille. Kaksivaiheinen vahvistus tulee usein itse ottaa käyttöön — tässä usein käytetty palvelu neuvoo, kuten Facebook, Instagram, Gmail ja Outlook. Pankeilla kaksivaiheinen vahvistus on oletuksena käytössä avainlukulistan, tunnistussovelluksen, tekstiviestikoodin, mobiiliavaimen tai muun ratkaisun muodossa.</p>
+    <div class="warn-box">
+      <div class="warn-box-label">⚠ Älä koskaan jaa vahvistuskoodeja</div>
+      <p>Jos saat some-alustoilla viestin yllättäen, jossa pyydetään koodia tai puhelinnumeroa, yritetään todennäköisesti murtaa sinun kaksivaiheista vahvistusta. <strong>Älä anna vahvistuskoodeja koskaan — ei tutuille eikä tuntemattomille.</strong></p>
+    </div>
+  </div>
+
+  <a href="index.html" class="back-link" style="margin-top: 8px;">Takaisin etusivulle</a>
+
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <p><strong>⚠ Et ole aidolla Suomi.fi-sivustolla.</strong></p>
+  <hr class="footer-divider">
+  <p>
+    Tämä sivusto on luotu kyberturvallisuustietoisuuden lisäämiseksi.<br>
+    Sivuston tekijä on Samuel Heinäjoki, IT-asiantuntija, kyberturvallisuuteen keskittyvä tradenomiopiskelija.<br>
+    Sivuston koodi on luotu tekoälyä (Claude Sonnet 4.6) hyödyntäen.<br>
+    Kuvien ja kuvitusten luomiseen on käytetty ChatGPT:n kuvanluonti-toiminnallisuutta.<br>
+    Tekstit ja sisällöt tekijän käsialaa.<br>
+    Viimeisin päivitys sivustolla on tehty 16.4.2026.
+  </p>
+  <hr class="footer-divider">
+  <p style="font-size:12px; color: #7aafd4;">
+    Sivustolla ei käytetä evästeitä. Kävijätilastointi toteutetaan avoimen lähdekoodin ratkaisulla
+    (<a href="https://soumi.goatcounter.com/help/gdpr" target="_blank" rel="noopener" style="color: #a8c8e8;">GoatCounter</a>),
+    joka ei identifioi kävijöitä.
+  </p>
+  <hr class="footer-divider">
+  <div id="gc-counter" style="display:inline-block; border: 1px solid rgba(255,255,255,0.25); border-radius: 4px; padding: 10px 24px; margin-top: 4px;">
+    <span id="gc-count" style="font-size: 28px; font-weight: 700; color: #ffffff; letter-spacing: 0.05em;">–</span>
+  </div>
+
+  <script data-goatcounter="https://soumi.goatcounter.com/count"
+          async src="//gc.zgo.at/count.js"></script>
+  <script>
+    var t = setInterval(function() {
+      if (window.goatcounter && window.goatcounter.get_data) {
+        clearInterval(t);
+        var xhr = new XMLHttpRequest();
+        xhr.addEventListener('load', function() {
+          try {
+            var data = JSON.parse(this.responseText);
+            document.getElementById('gc-count').textContent = data.count;
+          } catch(e) {}
+        });
+        xhr.open('GET', 'https://soumi.goatcounter.com/counter/TOTAL.json');
+        xhr.send();
+      }
+    }, 100);
+  </script>
+</footer>
+
+<script>
+  document.getElementById('login-btn').addEventListener('click', function() {
+    document.getElementById('login-tooltip').classList.toggle('visible');
+  });
+</script>
+
+</body>
+</html>
