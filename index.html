@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="fi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Soumi.fi – Varoituskampanja | Ei virallinen sivusto</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --suomi-blue: #003479;
+      --suomi-blue-mid: #0058a3;
+      --suomi-blue-light: #e8f0f8;
+      --suomi-link: #0058a3;
+      --suomi-link-hover: #003479;
+      --white: #ffffff;
+      --bg: #f2f5f9;
+      --border: #c8d8eb;
+      --text: #1a1a1a;
+      --text-mid: #444444;
+      --warn-bg: #1a2a3a;
+      --warn-text: #e8f0f8;
+    }
+
+    body {
+      font-family: 'Segoe UI', 'Arial', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+    }
+
+    /* ── WARNING BANNER ── */
+    .warning-banner {
+      background: var(--warn-bg);
+      color: var(--warn-text);
+      text-align: center;
+      padding: 10px 20px;
+      font-size: 13px;
+      letter-spacing: 0.02em;
+      border-bottom: 2px solid #4a7ab5;
+    }
+    .warning-banner strong { color: #ffffff; }
+
+    /* ── HEADER ── */
+    header {
+      background: var(--white);
+      border-bottom: 1px solid var(--border);
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 32px;
+      max-width: 1200px;
+      margin: 0 auto;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 20px;
+      font-weight: bold;
+      color: var(--suomi-blue);
+      text-decoration: none;
+    }
+    .logo-icon {
+      width: 38px;
+      height: 38px;
+      background: var(--suomi-blue);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 3px;
+    }
+    .logo-icon svg { fill: white; width: 24px; height: 24px; }
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .login-btn-wrapper { position: relative; }
+    .login-btn {
+      background: var(--suomi-blue);
+      color: white;
+      border: 2px solid rgba(255,255,255,0.4);
+      border-radius: 3px;
+      padding: 9px 20px;
+      font-size: 14px;
+      cursor: pointer;
+      opacity: 0.85;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .login-btn:hover { opacity: 1; }
+    .login-btn svg { fill: white; width: 16px; height: 16px; flex-shrink: 0; }
+    .login-tooltip {
+      display: none;
+      position: absolute;
+      top: calc(100% + 10px);
+      right: 0;
+      background: var(--warn-bg);
+      color: var(--warn-text);
+      font-size: 13px;
+      padding: 14px 16px 14px 14px;
+      border: 1px solid #4a7ab5;
+      border-radius: 4px;
+      z-index: 99;
+      width: 340px;
+      line-height: 1.65;
+    }
+    .login-tooltip.visible { display: block; }
+    .login-tooltip::after {
+      content: '';
+      position: absolute;
+      bottom: 100%;
+      right: 24px;
+      border: 6px solid transparent;
+      border-bottom-color: #4a7ab5;
+    }
+    .login-tooltip-close {
+      position: absolute;
+      top: 8px;
+      right: 10px;
+      background: none;
+      border: none;
+      color: #a8c8e8;
+      font-size: 16px;
+      cursor: pointer;
+      line-height: 1;
+      padding: 0 4px;
+    }
+    .login-tooltip-close:hover { color: white; }
+
+    /* ── HERO ── */
+    .hero {
+      background: var(--suomi-blue);
+      color: white;
+      padding: 56px 32px 48px;
+      text-align: center;
+    }
+    .hero-label {
+      display: inline-block;
+      background: rgba(255,255,255,0.15);
+      color: #cce0f5;
+      font-size: 11px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      padding: 4px 14px;
+      border-radius: 2px;
+      margin-bottom: 18px;
+      border: 1px solid rgba(255,255,255,0.2);
+    }
+    .hero h1 {
+      font-size: clamp(22px, 3.5vw, 42px);
+      font-weight: 300;
+      max-width: 820px;
+      margin: 0 auto;
+      line-height: 1.35;
+    }
+    .hero h1 .typo { color: #a8c8e8; font-style: italic; }
+    .hero h1 strong { font-weight: 700; }
+    .hero-sub {
+      margin-top: 20px;
+      font-size: 15px;
+      color: #cce0f5;
+      line-height: 1.7;
+    }
+    .hero-sub strong { color: #ffffff; }
+
+    /* ── CARDS SECTION ── */
+    .cards-section {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 48px 32px;
+    }
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+    @media (max-width: 800px) {
+      .cards-grid { grid-template-columns: 1fr; }
+      .header-top { padding: 12px 16px; }
+      .cards-section { padding: 32px 16px; }
+    }
+
+    .card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      display: flex;
+      flex-direction: column;
+      transition: box-shadow 0.2s;
+      opacity: 0;
+      animation: fadeUp 0.5s forwards;
+    }
+    .card:nth-child(1) { animation-delay: 0.1s; }
+    .card:nth-child(2) { animation-delay: 0.22s; }
+    .card:nth-child(3) { animation-delay: 0.34s; }
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(16px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .card:hover { box-shadow: 0 4px 18px rgba(0,52,121,0.15); }
+
+    .card-img {
+      width: 100%;
+      height: 200px;
+      position: relative;
+      overflow: hidden;
+      border-radius: 4px 4px 0 0;
+    }
+    .card-img.card-1 { background: #c8e4f4; }
+    .card-img.card-2 { background: #1e3a5f; }
+    .card-img.card-3 { background: #2c4a6e; }
+
+    .card-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    .peaceful-scene { width: 100%; height: 100%; }
+
+    .card-img svg.icon {
+      width: 72px;
+      height: 72px;
+      opacity: 0.3;
+      fill: white;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+    .card-badge {
+      position: absolute;
+      top: 14px;
+      left: 14px;
+      background: #6b3fa0;
+      color: white;
+      font-size: 12px;
+      font-weight: 600;
+      padding: 3px 12px;
+      border-radius: 12px;
+    }
+
+    .card-body {
+      padding: 20px 22px 24px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+    .card-title {
+      font-size: 18px;
+      font-weight: 700;
+      line-height: 1.35;
+      color: var(--text);
+      margin-bottom: 14px;
+    }
+    .card-link {
+      margin-top: auto;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 14px;
+      color: var(--suomi-link);
+      text-decoration: none;
+    }
+    .card-link:hover { color: var(--suomi-link-hover); text-decoration: underline; }
+    .card-link::before { content: '›'; font-size: 18px; line-height: 1; }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--suomi-blue);
+      color: #a8c8e8;
+      text-align: center;
+      padding: 32px 32px;
+      font-size: 13px;
+      line-height: 1.8;
+    }
+    footer strong { color: white; }
+    .footer-divider {
+      border: none;
+      border-top: 1px solid rgba(255,255,255,0.15);
+      margin: 16px auto;
+      max-width: 600px;
+    }
+  </style>
+</head>
+<body>
+
+<!-- WARNING BANNER -->
+<div class="warning-banner">
+  <strong>⚠ HUOMIO:</strong> Et ole aidolla Suomi.fi-sivustolla. Tämä on kyberturvallisuuskampanja.
+</div>
+
+<!-- HEADER -->
+<header>
+  <div class="header-top">
+    <a href="#" class="logo">
+      <div class="logo-icon">
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="8" height="8"/>
+          <rect x="14" y="2" width="8" height="8"/>
+          <rect x="2" y="14" width="8" height="8"/>
+          <rect x="14" y="14" width="8" height="8"/>
+        </svg>
+      </div>
+      <span>Soumi.fi</span>
+    </a>
+
+    <div class="header-actions">
+      <div class="login-btn-wrapper">
+        <button class="login-btn" id="login-btn">
+          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12 2a5 5 0 100 10A5 5 0 0012 2zm-7 20a7 7 0 0114 0H5z"/>
+          </svg>
+          Tunnistaudu
+        </button>
+        <div class="login-tooltip" id="login-tooltip">
+          <button class="login-tooltip-close" onclick="document.getElementById('login-tooltip').classList.remove('visible')" aria-label="Sulje">✕</button>
+          ⚠ Tunnistautuminen ei tälle sivulle onnistu.<br><br>
+          Olethan tarkka ja tunnistaudut vain aidolle Suomi.fi-sivustolle.<br><br>
+          Asiointipalveluissa kuten Vero.fi sivuilla tunnistaudutaan <strong>https://tunnistautuminen.suomi.fi/</strong> -sivuston kautta.<br><br>
+          Osoitteessa ei saa olla kirjoitusvirheitä, eikä liikaa esimerkiksi .fi-päätteitä.
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<script>
+  document.getElementById('login-btn').addEventListener('click', function() {
+    document.getElementById('login-tooltip').classList.toggle('visible');
+  });
+</script>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-label">Varoituskampanja</div>
+  <h1>
+    <span class="typo">Soumi.fi</span> — kirjoitusvirhe ajoi sinut harhaan,
+    <br><strong>mutta hyväntekijä pelasti sinut.</strong>
+  </h1>
+  <p class="hero-sub">
+    Ennen sitä, tutustu tämän sivun ohjeisiin, jotka lisäävät selailusi tietoturvaa.
+  </p>
+
+</section>
+
+<!-- CARDS -->
+<section class="cards-section">
+  <div class="cards-grid">
+
+    <!-- Card 1: peaceful illustration (replace with img1.png if desired) -->
+    <div class="card">
+      <div class="card-img card-1">
+        <!--
+          KUVAN VAIHTO-OHJE:
+          Poista alla oleva <svg>-elementti kokonaan ja lisää tilalle:
+          <img src="img1.png" alt="Rauhallinen maisema" />
+          Muista laittaa img1.png samaan kansioon kuin index.html
+        -->
+        <svg class="peaceful-scene" viewBox="0 0 400 200" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#8ec8e8"/>
+              <stop offset="100%" stop-color="#c8e4f4"/>
+            </linearGradient>
+          </defs>
+          <rect width="400" height="200" fill="url(#sky)"/>
+          <circle cx="320" cy="52" r="28" fill="#ffe08a" opacity="0.85"/>
+          <circle cx="320" cy="52" r="42" fill="#ffe08a" opacity="0.18"/>
+          <ellipse cx="80" cy="45" rx="45" ry="18" fill="white" opacity="0.75"/>
+          <ellipse cx="108" cy="37" rx="30" ry="13" fill="white" opacity="0.75"/>
+          <ellipse cx="54" cy="42" rx="28" ry="12" fill="white" opacity="0.75"/>
+          <ellipse cx="205" cy="56" rx="38" ry="14" fill="white" opacity="0.6"/>
+          <ellipse cx="230" cy="49" rx="25" ry="11" fill="white" opacity="0.6"/>
+          <ellipse cx="0" cy="170" rx="180" ry="70" fill="#7db87d"/>
+          <ellipse cx="400" cy="175" rx="160" ry="60" fill="#6aad6a"/>
+          <ellipse cx="200" cy="180" rx="120" ry="50" fill="#8ec08e"/>
+          <rect x="152" y="108" width="7" height="30" fill="#4a6a2a"/>
+          <ellipse cx="155" cy="100" rx="18" ry="22" fill="#5a9a5a"/>
+          <rect x="183" y="115" width="6" height="24" fill="#4a6a2a"/>
+          <ellipse cx="186" cy="108" rx="15" ry="18" fill="#4a8a4a"/>
+          <rect x="208" y="112" width="6" height="26" fill="#4a6a2a"/>
+          <ellipse cx="211" cy="105" rx="16" ry="19" fill="#6aaa6a"/>
+          <ellipse cx="200" cy="176" rx="105" ry="26" fill="#5aafd4" opacity="0.65"/>
+          <ellipse cx="195" cy="179" rx="75" ry="6" fill="white" opacity="0.12"/>
+          <path d="M240 68 Q244 64 248 68" fill="none" stroke="#3a5a7a" stroke-width="1.5" stroke-linecap="round"/>
+          <path d="M255 60 Q259 56 263 60" fill="none" stroke="#3a5a7a" stroke-width="1.5" stroke-linecap="round"/>
+          <path d="M270 71 Q273 68 276 71" fill="none" stroke="#3a5a7a" stroke-width="1.5" stroke-linecap="round"/>
+        </svg>
+        <span class="card-badge">Opas</span>
+      </div>
+      <div class="card-body">
+        <h2 class="card-title">Näin vältyt digihuijauksilta ja suojaat laitteesi</h2>
+        <a href="#" class="card-link">Tietoa ja koulutusta</a>
+      </div>
+    </div>
+
+    <!-- Card 2 -->
+    <div class="card">
+      <div class="card-img card-2">
+        <svg class="icon" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+          <path d="M32 8a4 4 0 100 8 4 4 0 000-8zm-8 12v6h4v18h-4v6h16v-6h-4V26h4v-6H24zm24-8a6 6 0 100 12 6 6 0 000-12zM8 12a6 6 0 100 12A6 6 0 008 12z"/>
+        </svg>
+      </div>
+      <div class="card-body">
+        <h2 class="card-title">Varo huijausviestejä! — näin asioit turvallisesti Suomi.fi-palvelussa</h2>
+        <a href="https://dvv.fi/-/varo-liikkeella-olevia-huijausviesteja-" target="_blank" rel="noopener" class="card-link">Siirry Digi- ja väestötietoviraston tiedotteeseen</a>
+      </div>
+    </div>
+
+    <!-- Card 3 -->
+    <div class="card">
+      <div class="card-img card-3">
+        <svg class="icon" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="32" cy="20" r="12" fill="none" stroke="white" stroke-width="4"/>
+          <path d="M10 54c0-12.15 9.85-22 22-22s22 9.85 22 22" fill="none" stroke="white" stroke-width="4" stroke-linecap="round"/>
+        </svg>
+        <span class="card-badge">Opas</span>
+      </div>
+      <div class="card-body">
+        <h2 class="card-title">Tietoa sivuston tekijästä: Samuel Heinäjoki</h2>
+        <a href="#" class="card-link">Tutustu sivuston tekijään ja siihen miksi sivusto luotiin</a>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <p><strong>⚠ Et ole aidolla Suomi.fi-sivustolla.</strong></p>
+  <hr class="footer-divider">
+  <p>
+    Tämä sivusto on luotu kyberturvallisuustietoisuuden lisäämiseksi.<br>
+    Sivuston tekijä on Samuel Heinäjoki, IT-asiantuntija, kyberturvallisuuteen keskittyvä tradenomiopiskelija.<br>
+    Sivuston koodi on luotu tekoälyä (Claude Sonnet 4.6) hyödyntäen.<br>
+    Kuvien ja kuvitusten luomiseen on käytetty ChatGPT:n kuvanluonti-toiminnallisuutta.<br>
+    Tekstit ja sisällöt tekijän käsialaa.<br>
+    Viimeisin päivitys sivustolla on tehty 16.4.2026.
+  </p>
+  <hr class="footer-divider">
+  <p style="font-size:12px; color: #7aafd4;">
+    Sivustolla ei käytetä evästeitä. Kävijätilastointi toteutetaan avoimen lähdekoodin ratkaisulla
+    (<a href="https://soumi.goatcounter.com/help/gdpr" target="_blank" rel="noopener" style="color: #a8c8e8;">GoatCounter</a>),
+    joka ei identifioi kävijöitä.
+  </p>
+  <hr class="footer-divider">
+  <div id="gc-counter" style="display:inline-block; border: 1px solid rgba(255,255,255,0.25); border-radius: 4px; padding: 10px 24px; margin-top: 4px;">
+    <span id="gc-count" style="font-size: 28px; font-weight: 700; color: #ffffff; letter-spacing: 0.05em;">–</span>
+  </div>
+
+  <script data-goatcounter="https://soumi.goatcounter.com/count"
+          async src="//gc.zgo.at/count.js"></script>
+  <script>
+    var t = setInterval(function() {
+      if (window.goatcounter && window.goatcounter.get_data) {
+        clearInterval(t);
+        var xhr = new XMLHttpRequest();
+        xhr.addEventListener('load', function() {
+          try {
+            var data = JSON.parse(this.responseText);
+            document.getElementById('gc-count').textContent = data.count;
+          } catch(e) {}
+        });
+        xhr.open('GET', 'https://soumi.goatcounter.com/counter/TOTAL.json');
+        xhr.send();
+      }
+    }, 100);
+  </script>
+</footer>
+
+</body>
+</html>
